@@ -23,7 +23,7 @@
 %% @doc A non-blocking tcp listener for SMTP connections. Based on the tcp_listener module by Serge
 %% Aleynikov [http://www.trapexit.org/Building_a_Non-blocking_TCP_server_using_OTP_principles]
 
--module(gen_smtp_server).
+-module(smtp_server).
 -behaviour(gen_server).
 
 -define(PORT, 2525).
@@ -97,7 +97,7 @@ sessions(Pid) ->
 	gen_server:call(Pid, sessions).
 
 %% @doc
-%% The gen_smtp_server is given a list of tcp listener configurations.
+%% The smtp_server is given a list of tcp listener configurations.
 %% You'll typically only want to listen on one port so your options
 %% will be a single-item list containing a proplist. e.g.:
 %%
@@ -117,7 +117,7 @@ sessions(Pid) ->
 %% `tcp', the default listen address is `0.0.0.0' and the default address family
 %% is `inet'. Anything passed in the `sessionoptions' option, is passed through
 %% to `gen_server_smtp_session'.
-%% @see gen_smtp_server_session
+%% @see smtp_server_session
 -spec(init/1 :: (Args :: list()) -> {'ok', #state{}} | {'stop', any()}).
 init([Module, Configurations]) ->
 	process_flag(trap_exit, true),
@@ -126,7 +126,7 @@ init([Module, Configurations]) ->
 	try
 		case Configurations of
 			[FirstConfig|_] when is_list(FirstConfig) -> ok;
-			_ -> exit({init,"Please start gen_smtp_server with an options argument formatted as a list of proplists"})
+			_ -> exit({init,"Please start smtp_server with an options argument formatted as a list of proplists"})
 		end,
 	        error_logger:info_msg("~p starting at ~p~n", [?MODULE, node()]),
 		Listeners = [
@@ -185,7 +185,7 @@ handle_info({inet_async, ListenPort,_, {ok, ClientAcceptSocket}},
 		{ok, ClientSocket} = socket:handle_inet_async(Listener#listener.socket, ClientAcceptSocket, Listener#listener.listenoptions),
 		%% New client connected
 		% io:format("new client connection.~n", []),
-		Sessions = case gen_smtp_server_session:start(ClientSocket, Module, [{hostname, Listener#listener.hostname}, {sessioncount, length(CurSessions) + 1} | Listener#listener.sessionoptions]) of
+		Sessions = case smtp_server_session:start(ClientSocket, Module, [{hostname, Listener#listener.hostname}, {sessioncount, length(CurSessions) + 1} | Listener#listener.sessionoptions]) of
 			{ok, Pid} ->
 				link(Pid),
 				socket:controlling_process(ClientSocket, Pid),

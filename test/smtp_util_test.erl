@@ -1,4 +1,4 @@
--module(gen_smtp_util_test).
+-module(smtp_util_test).
 
 -compile(export_all).
 

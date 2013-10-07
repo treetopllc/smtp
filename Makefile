@@ -1,7 +1,7 @@
-compile:
-	@./rebar compile
+# See LICENSE for licensing information.
 
-clean:
-	@./rebar clean
+PROJECT = smtp
 
-.PHONY: compile clean
+# Standard targets.
+
+include erlang.mk

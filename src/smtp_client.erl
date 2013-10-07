@@ -23,7 +23,7 @@
 %% @doc A simple SMTP client used for sending mail - assumes relaying via a
 %% smarthost.
 
--module(gen_smtp_client).
+-module(smtp_client).
 
 -define(DEFAULT_OPTIONS, [
 		{ssl, false}, % whether to connect on 465 in ssl mode

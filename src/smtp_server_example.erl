@@ -1,8 +1,8 @@
-%% @doc A simple example callback module for `gen_smtp_server_session' that also serves as
+%% @doc A simple example callback module for `smtp_server_session' that also serves as
 %% documentation for the required callback API.
 
 -module(smtp_server_example).
--behaviour(gen_smtp_server_session).
+-behaviour(smtp_server_session).
 
 
 -export([init/4, handle_HELO/2, handle_EHLO/3, handle_MAIL/2, handle_MAIL_extension/2,
@@ -22,7 +22,7 @@
 %% The arguments to the function are the SMTP server's hostname (for use in the SMTP anner),
 %% The number of current sessions (eg. so you can do session limiting), the IP address of the
 %% connecting client, and a freeform list of options for the module. The Options are extracted
-%% from the `callbackoptions' parameter passed into the `gen_smtp_server_session' when it was
+%% from the `callbackoptions' parameter passed into the `smtp_server_session' when it was
 %% started.
 %%
 %% If you want to continue the session, return `{ok, Banner, State}' where Banner is the SMTP
@@ -217,6 +217,6 @@ relay(_, [], _) ->
 relay(From, [To|Rest], Data) ->
 	% relay message to email address
 	[_User, Host] = string:tokens(To, "@"),
-	gen_smtp_client:send({From, [To], erlang:binary_to_list(Data)}, [{relay, Host}]),
+	smtp_client:send({From, [To], erlang:binary_to_list(Data)}, [{relay, Host}]),
 	relay(From, Rest, Data).
 

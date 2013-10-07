@@ -26,7 +26,7 @@
 %% please see `smtp_server_example'.
 %% @see smtp_server_example
 
--module(gen_smtp_server_session).
+-module(smtp_server_session).
 -behaviour(gen_server).
 
 -ifdef(TEST).
@@ -97,7 +97,7 @@ start_link(Socket, Module, Options) ->
 	gen_server:start_link(?MODULE, [Socket, Module, Options], []).
 
 %% @doc Start a SMTP session. Arguments are `Socket' (probably opened via
-%% `gen_smtp_server' or an analogue), which is an abstract socket implemented
+%% `smtp_server' or an analogue), which is an abstract socket implemented
 %% via the `socket' module, `Module' is the name of the callback module
 %% implementing the SMTP session behaviour that you'd like to use and `Options'
 %% is the optional arguments provided by the accept server.
@@ -952,7 +952,7 @@ smtp_session_test_() ->
 					SSock when is_port(SSock) ->
 						ok
 				end,
-				{ok, Pid} = gen_smtp_server_session:start(SSock, smtp_server_example, [{hostname, "localhost"}, {sessioncount, 1}]),
+				{ok, Pid} = smtp_server_session:start(SSock, smtp_server_example, [{hostname, "localhost"}, {sessioncount, 1}]),
 				socket:controlling_process(SSock, Pid),
 				{CSock, Pid}
 		end,
@@ -1257,7 +1257,7 @@ smtp_session_auth_test_() ->
 					SSock when is_port(SSock) ->
 						ok
 				end,
-				{ok, Pid} = gen_smtp_server_session:start(SSock, smtp_server_example, [{hostname, "localhost"}, {sessioncount, 1}, {callbackoptions, [{auth, true}]}]),
+				{ok, Pid} = smtp_server_session:start(SSock, smtp_server_example, [{hostname, "localhost"}, {sessioncount, 1}, {callbackoptions, [{auth, true}]}]),
 				socket:controlling_process(SSock, Pid),
 				{CSock, Pid}
 		end,
@@ -1766,7 +1766,7 @@ smtp_session_tls_test_() ->
 					SSock when is_port(SSock) ->
 						ok
 				end,
-				{ok, Pid} = gen_smtp_server_session:start(SSock, smtp_server_example, [{keyfile, "../testdata/server.key"}, {certfile, "../testdata/server.crt"}, {hostname, "localhost"}, {sessioncount, 1}, {callbackoptions, [{auth, true}]}]),
+				{ok, Pid} = smtp_server_session:start(SSock, smtp_server_example, [{keyfile, "../testdata/server.key"}, {certfile, "../testdata/server.crt"}, {hostname, "localhost"}, {sessioncount, 1}, {callbackoptions, [{auth, true}]}]),
 				socket:controlling_process(SSock, Pid),
 				{CSock, Pid}
 		end,
