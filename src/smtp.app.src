@@ -3,7 +3,7 @@
 {application, smtp,
  [
   {description, "An erlang SMTP server/client framework"},
-  {vsn, "0.1"},
+  {vsn, "1.0.0"},
   {modules,
    [
     binstr,
